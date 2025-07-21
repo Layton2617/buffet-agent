@@ -9,6 +9,10 @@ services:
         sync: false
       - key: FLASK_ENV
         value: production
+      - key: RENDER
+        value: true
       - key: PORT
         value: 5000
+
+
 
