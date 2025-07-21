@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: buffett-agent
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: python src/main.py
+    envVars:
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: FLASK_ENV
+        value: production
+      - key: PORT
+        value: 5000
+
