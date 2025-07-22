@@ -1,5 +1,9 @@
 import tweepy
 import praw
+import os
+import dotenv
+
+dotenv.load_dotenv()
 
 class SocialMediaAgent:
     """Agent for collecting and analyzing social media data (e.g., X/Twitter, Reddit)."""
@@ -23,7 +27,11 @@ class SocialMediaAgent:
                 user_agent=reddit_keys['user_agent']
             )
         else:
-            self.reddit = None
+            self.reddit = praw.Reddit(
+                client_id=os.getenv('CLIENT_ID'),
+                client_secret=os.getenv('SECRET_KEY'),
+                user_agent=os.getenv('REDDIT_USER_AGENT')
+            )
 
     def fetch_tweets(self, query: str, count: int = 10):
         """Fetch tweets from X/Twitter based on a query string."""
