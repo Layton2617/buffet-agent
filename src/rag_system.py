@@ -4,11 +4,18 @@ from typing import List, Dict, Tuple
 import re
 
 class BuffettRAG:
+    """
+    RAG（检索增强生成）系统，管理语料库和检索。
+    """
     def __init__(self):
+        # 加载语料库
         self.corpus = self._load_buffett_corpus()
         self.embeddings = {}
         
     def _load_buffett_corpus(self) -> List[Dict]:
+        """
+        加载巴菲特语录/信件等文本。
+        """
         
         return [
             {
@@ -74,6 +81,9 @@ class BuffettRAG:
         ]
     
     def _simple_embedding(self, text: str) -> np.ndarray:
+        """
+        将文本转为简单向量，用于相似度计算。
+        """
         
         words = re.findall(r'\w+', text.lower())
         vocab = ['buy', 'sell', 'value', 'price', 'market', 'stock', 'company', 'business', 
@@ -88,6 +98,9 @@ class BuffettRAG:
         return embedding / norm if norm > 0 else embedding
     
     def search(self, query: str, top_k: int = 3) -> List[Dict]:
+        """
+        根据查询语句检索最相关的语料。
+        """
         
         query_embedding = self._simple_embedding(query)
         
@@ -110,6 +123,9 @@ class BuffettRAG:
         return results
     
     def get_context_for_query(self, query: str) -> str:
+        """
+        为用户问题生成上下文片段。
+        """
         
         results = self.search(query, top_k=3)
         
@@ -121,10 +137,16 @@ class BuffettRAG:
         return "\n\n".join(context_parts)
     
     def get_topic_documents(self, topic: str) -> List[Dict]:
+        """
+        按主题检索语料。
+        """
         
         return [doc for doc in self.corpus if doc.get('topic') == topic]
     
     def get_historical_context(self, year_range: Tuple[int, int]) -> List[Dict]:
+        """
+        按年份区间检索语料。
+        """
         
         start_year, end_year = year_range
         return [doc for doc in self.corpus 

@@ -2,13 +2,18 @@ import numpy as np
 from typing import Dict, List, Optional
 
 class FinancialTools:
+    """
+    金融分析工具集合，全部为静态方法。
+    """
     
     @staticmethod
     def calculate_dcf(free_cash_flows: List[float], 
                      terminal_growth_rate: float = 0.025,
                      discount_rate: float = 0.10,
                      terminal_year: int = 5) -> Dict:
-        
+        """
+        计算企业的DCF估值。
+        """
         if not free_cash_flows or len(free_cash_flows) < terminal_year:
             return {"error": "Insufficient cash flow data"}
         
@@ -42,7 +47,9 @@ class FinancialTools:
                         industry_avg_pe: float,
                         historical_pe_range: List[float],
                         earnings_growth_rate: float) -> Dict:
-        
+        """
+        分析市盈率，给出估值信号。
+        """
         try:
             if not historical_pe_range or len(historical_pe_range) < 2:
                 historical_pe_range = [15, 25]
@@ -81,7 +88,9 @@ class FinancialTools:
     def calculate_margin_of_safety(intrinsic_value: float,
                                  current_price: float,
                                  minimum_margin: float = 0.20) -> Dict:
-        
+        """
+        计算安全边际和投资建议。
+        """
         try:
             if current_price <= 0 or intrinsic_value <= 0:
                 return {"error": "Invalid price or intrinsic value"}
@@ -121,7 +130,9 @@ class FinancialTools:
     
     @staticmethod
     def calculate_vwap(prices: List[float], volumes: List[float]) -> Dict:
-        
+        """
+        计算成交量加权平均价（技术分析）。
+        """
         try:
             if len(prices) != len(volumes) or not prices:
                 return {"error": "Invalid price or volume data"}
@@ -161,7 +172,9 @@ class FinancialTools:
     def buffett_score(roe: float, debt_to_equity: float, 
                      profit_margin: float, revenue_growth: float,
                      pe_ratio: float) -> Dict:
-        
+        """
+        根据多项财务指标给出“巴菲特评分”和评级。
+        """
         try:
             score = 0
             factors = {}

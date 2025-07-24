@@ -7,7 +7,11 @@ from src.financial_tools import FinancialTools
 from src.belief_system import BeliefTracker
 
 class BuffettAgent:
+    """
+    巴菲特智能体核心类，负责整合RAG、金融工具、信念系统，处理用户请求。
+    """
     def __init__(self):
+        # 初始化OpenAI、RAG、金融工具、信念系统
         self.client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
         self.rag = BuffettRAG()
         self.tools = FinancialTools()
@@ -15,6 +19,9 @@ class BuffettAgent:
         self.beliefs.initialize_default_beliefs()
         
     def _get_system_prompt(self) -> str:
+        """
+        生成系统提示词，包含当前信念和投资原则。
+        """
         current_beliefs = self.beliefs.get_all_beliefs()
         belief_context = self._format_beliefs_for_prompt(current_beliefs)
         
@@ -51,6 +58,9 @@ Available tools:
 Format your response with clear reasoning steps and practical advice."""
 
     def _format_beliefs_for_prompt(self, beliefs: Dict) -> str:
+        """
+        将信念字典格式化为字符串，便于嵌入提示词。
+        """
         if not beliefs:
             return "No specific market beliefs currently active."
         
@@ -62,6 +72,9 @@ Format your response with clear reasoning steps and practical advice."""
         return "\n".join(belief_lines)
     
     def _extract_tool_calls(self, user_message: str) -> List[Dict]:
+        """
+        根据用户消息内容，自动判断需要调用哪些金融工具。
+        """
         tool_calls = []
         message_lower = user_message.lower()
         
@@ -80,6 +93,9 @@ Format your response with clear reasoning steps and practical advice."""
         return tool_calls
     
     def _generate_reasoning_chain(self, user_message: str, context: str, tool_results: List[Dict]) -> List[str]:
+        """
+        生成分步推理链，解释智能体的分析过程。
+        """
         reasoning_steps = [
             "Step 1: Understanding the Question",
             f"The user is asking about: {user_message}",
@@ -116,6 +132,9 @@ Format your response with clear reasoning steps and practical advice."""
         return reasoning_steps
     
     def process_query(self, user_message: str, session_id: str = "default") -> Dict:
+        """
+        主入口，处理用户问题，调用RAG、工具、信念，生成回复。
+        """
         try:
             context = self.rag.get_context_for_query(user_message)
             
@@ -196,6 +215,9 @@ Please provide a comprehensive response following the reasoning chain approach."
             }
     
     def update_market_context(self, news_summary: str) -> Dict:
+        """
+        根据新闻摘要更新市场信念。
+        """
         updates = self.beliefs.update_beliefs_from_news(news_summary)
         return {
             'updates_made': updates,
@@ -203,6 +225,9 @@ Please provide a comprehensive response following the reasoning chain approach."
         }
     
     def get_portfolio_analysis(self, symbols: List[str]) -> Dict:
+        """
+        对一组股票做综合分析，返回评分和建议。
+        """
         analysis = {}
         
         for symbol in symbols:

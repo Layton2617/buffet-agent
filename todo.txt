@@ -1,0 +1,34 @@
+1. fin_data.py 能抓到的数据类型
+根据你的代码，fin_data.py 主要抓取以下内容：
+公司基本信息（如名称、行业、简介等）
+历史行情数据（如每日开盘价、收盘价、成交量等）
+公司新闻
+内部人情绪
+政府支出
+游说活动
+签证申请
+专利
+盈利意外
+公司财报（PL, BS, CF, DERIVED）（利润表、资产负债表、现金流量表、衍生数据）
+这些数据会以csv或json的形式保存在本地。
+
+
+2. 各API接口需要的数据字段
+1）/api/tools/dcf（DCF估值）
+需要：未来几年的自由现金流（free_cash_flows），终值增长率（terminal_growth_rate），贴现率（discount_rate）
+提取方法：从公司财报的现金流量表（CF）中提取“自由现金流”字段，按年度整理成列表。
+2）/api/tools/pe（市盈率分析）
+需要：当前市盈率（current_pe），行业平均市盈率（industry_avg_pe），历史市盈率区间（historical_pe_range），盈利增长率（earnings_growth_rate）
+提取方法：从公司基本信息或财报中提取PE，行业平均PE可手动输入或外部查找，历史PE区间可用历史行情和财报计算，盈利增长率可用净利润年度增速。
+3）/api/tools/buffett-score（巴菲特评分）
+需要：ROE（净资产收益率），debt_to_equity（负债率），profit_margin（利润率），revenue_growth（收入增长率），pe_ratio（市盈率）
+提取方法：全部可从公司财报（PL、BS）中计算或直接获取。
+4）/api/tools/margin（安全边际）
+需要：intrinsic_value（内在价值），current_price（当前价格），minimum_margin（最低安全边际）
+提取方法：内在价值可用DCF等方法算出，当前价格可用历史行情的最新收盘价。
+5）/api/portfolio/analyze
+需要：symbols（股票代码列表）
+提取方法：直接用你关注的股票代码列表。
+6）/api/beliefs/update
+需要：news_summary（新闻摘要）
+提取方法：用公司新闻数据，人工或自动摘要后传入。

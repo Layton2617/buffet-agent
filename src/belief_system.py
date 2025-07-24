@@ -4,13 +4,20 @@ from typing import Dict, List, Optional
 import math
 
 class BeliefTracker:
+    """
+    市场信念追踪与管理。
+    """
     def __init__(self):
+        # 初始化信念、历史、因果关系
         self.beliefs = {}
         self.belief_history = []
         self.causal_links = {}
         
     def update_belief(self, key: str, value: str, confidence: float = 0.7, 
                      decay_factor: float = 0.95) -> None:
+        """
+        更新单个信念，记录历史。
+        """
         
         timestamp = datetime.utcnow()
         
@@ -45,6 +52,9 @@ class BeliefTracker:
         }
     
     def get_belief(self, key: str) -> Optional[Dict]:
+        """
+        获取单个信念，自动衰减置信度。
+        """
         
         if key not in self.beliefs:
             return None
@@ -60,6 +70,9 @@ class BeliefTracker:
         return belief
     
     def get_all_beliefs(self) -> Dict:
+        """
+        获取所有置信度较高的信念。
+        """
         
         current_beliefs = {}
         for key in self.beliefs:
@@ -70,6 +83,9 @@ class BeliefTracker:
         return current_beliefs
     
     def add_causal_link(self, cause: str, effect: str, strength: float = 0.5) -> None:
+        """
+        添加信念间因果关系。
+        """
         
         if cause not in self.causal_links:
             self.causal_links[cause] = []
@@ -81,6 +97,9 @@ class BeliefTracker:
         })
     
     def get_influenced_beliefs(self, belief_key: str) -> List[Dict]:
+        """
+        获取被某信念影响的信念。
+        """
         
         influenced = []
         if belief_key in self.causal_links:
@@ -95,6 +114,9 @@ class BeliefTracker:
         return influenced
     
     def get_belief_summary(self) -> Dict:
+        """
+        按置信度分组返回信念摘要。
+        """
         
         beliefs = self.get_all_beliefs()
         
@@ -115,6 +137,9 @@ class BeliefTracker:
         }
     
     def initialize_default_beliefs(self) -> None:
+        """
+        初始化一组默认信念和因果关系。
+        """
         
         default_beliefs = [
             ('fed_policy', 'neutral', 0.6),
@@ -145,6 +170,9 @@ class BeliefTracker:
             self.add_causal_link(cause, effect, strength)
     
     def update_beliefs_from_news(self, news_summary: str) -> List[str]:
+        """
+        根据新闻摘要自动调整信念。
+        """
         
         updates = []
         news_lower = news_summary.lower()
