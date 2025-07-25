@@ -71,6 +71,8 @@ class DataTemplate:
         for k, v in kwargs.items():
             if k in self.data:
                 self.data[k] = v
+            else:
+                raise ValueError(f"未知字段: {k}")
 
     def to_api_dict(self):
         """

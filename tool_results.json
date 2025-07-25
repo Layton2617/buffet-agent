@@ -1,0 +1,74 @@
+[
+  {
+    "data": {
+      "GOOGL": {
+        "DCF": 829279667541.33,
+        "FCF1": 62195975065.6,
+        "discount_rate": 0.1,
+        "growth_rate": 0.025
+      },
+      "AAPL": {
+        "DCF": 1329103833770.67,
+        "FCF1": 99682787532.8,
+        "discount_rate": 0.1,
+        "growth_rate": 0.025
+      }
+    },
+    "tool": "DCF Analysis",
+    "summary": "DCF value: $0.00"
+  },
+  {
+    "data": {
+      "GOOGL": {
+        "current_pe": 20.487206,
+        "industry_avg_pe": 21.11,
+        "historical_min": 21.1,
+        "historical_max": 34.01,
+        "historical_avg": 24.47,
+        "peg_ratio": 0.42,
+        "valuation_signal": "NEUTRAL",
+        "relative_to_industry": -3.0,
+        "relative_to_history": -16.3
+      },
+      "AAPL": {
+        "current_pe": 33.295948,
+        "industry_avg_pe": 38.61,
+        "historical_min": 11.3,
+        "historical_max": 52.7,
+        "historical_avg": 24.3,
+        "peg_ratio": 4.27,
+        "valuation_signal": "ATTRACTIVE",
+        "relative_to_industry": -13.8,
+        "relative_to_history": 37.0
+      }
+    },
+    "tool": "P/E Analysis",
+    "summary": "Current P/E: 0, Signal: N/A"
+  },
+  {
+    "data": {
+      "GOOGL": {
+        "intrinsic_value": 142.49,
+        "current_price": 192.17,
+        "margin_of_safety": -34.87,
+        "minimum_margin": 20.0,
+        "safety_rating": "DANGEROUS",
+        "upside_potential": -25.85,
+        "recommendation": "AVOID",
+        "price_to_value_ratio": 1.349
+      },
+      "AAPL": {
+        "intrinsic_value": 88.99,
+        "current_price": 213.76,
+        "margin_of_safety": -140.21,
+        "minimum_margin": 20.0,
+        "safety_rating": "DANGEROUS",
+        "upside_potential": -58.37,
+        "recommendation": "AVOID",
+        "price_to_value_ratio": 2.402
+      }
+    },
+    "tool": "Margin of Safety",
+    "summary": "Margin: 0%, Rating: N/A"
+  }
+]

@@ -4,7 +4,7 @@ from src.models.conversation import db, Conversation, BeliefState, PortfolioReco
 import json
 import uuid
 from datetime import datetime
-
+import sys  
 buffett_bp = Blueprint('buffett', __name__)
 
 agent = BuffettAgent()
@@ -57,11 +57,13 @@ def get_conversation(session_id):
 def calculate_dcf():
     try:
         data = request.get_json()
-        free_cash_flows = data.get('free_cash_flows', [])
-        terminal_growth_rate = data.get('terminal_growth_rate', 0.025)
+        FCF0 = data.get('FCF0', 1000)
+        growth_rate = data.get('growth_rate', 0.025)
         discount_rate = data.get('discount_rate', 0.10)
+        periods = data.get('periods', 20)
+        periods_per_year = data.get('periods_per_year', 1)
         
-        result = agent.tools.calculate_dcf(free_cash_flows, terminal_growth_rate, discount_rate)
+        result = agent.tools.calculate_dcf(FCF0, growth_rate, discount_rate, periods, periods_per_year)
         return jsonify(result)
     except Exception as e:
         return jsonify({'error': str(e)}), 500
@@ -148,7 +150,7 @@ def analyze_portfolio():
     try:
         data = request.get_json()
         symbols = data.get('symbols', [])
-        
+        print(f"[analyze_portfolio] 输入symbols: {symbols[:10]}...", file=sys.stderr)
         analysis = agent.get_portfolio_analysis(symbols)
         
         for symbol, analysis_data in analysis.items():

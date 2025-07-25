@@ -1,5 +1,6 @@
 import numpy as np
 from typing import Dict, List, Optional
+import sys
 
 class FinancialTools:
     """
@@ -7,40 +8,20 @@ class FinancialTools:
     """
     
     @staticmethod
-    def calculate_dcf(free_cash_flows: List[float], 
-                     terminal_growth_rate: float = 0.025,
-                     discount_rate: float = 0.10,
-                     terminal_year: int = 5) -> Dict:
+    def simple_gordon_dcf(FCF0, growth_rate=0.025, discount_rate=0.10):
         """
-        计算企业的DCF估值。
+        只用一步forward FCF，永续增长模型估算企业价值
         """
-        if not free_cash_flows or len(free_cash_flows) < terminal_year:
-            return {"error": "Insufficient cash flow data"}
-        
-        try:
-            projected_fcf = free_cash_flows[:terminal_year]
-            
-            terminal_value = projected_fcf[-1] * (1 + terminal_growth_rate) / (discount_rate - terminal_growth_rate)
-            
-            present_values = []
-            for i, fcf in enumerate(projected_fcf):
-                pv = fcf / ((1 + discount_rate) ** (i + 1))
-                present_values.append(pv)
-            
-            terminal_pv = terminal_value / ((1 + discount_rate) ** terminal_year)
-            
-            enterprise_value = sum(present_values) + terminal_pv
-            
-            return {
-                "enterprise_value": round(enterprise_value, 2),
-                "terminal_value": round(terminal_value, 2),
-                "terminal_pv": round(terminal_pv, 2),
-                "present_values": [round(pv, 2) for pv in present_values],
-                "discount_rate": discount_rate,
-                "terminal_growth_rate": terminal_growth_rate
-            }
-        except Exception as e:
-            return {"error": str(e)}
+        FCF1 = FCF0 * (1 + growth_rate)
+        if discount_rate <= growth_rate:
+            return {"error": "Discount rate must be greater than growth rate"}
+        value = FCF1 / (discount_rate - growth_rate)
+        return {
+            "DCF": round(value, 2),
+            "FCF1": round(FCF1, 2),
+            "discount_rate": discount_rate,
+            "growth_rate": growth_rate
+        }
     
     @staticmethod
     def analyze_pe_ratio(current_pe: float, 

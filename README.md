@@ -172,3 +172,95 @@ Check application logs for detailed error information:
 python src/main.py
 ```
 
+---
+
+## Project Improvements and Refactoring Summary on July 24th
+
+This section documents the major improvements, refactoring, and bug fixes made to the project, with a focus on clarity, robustness, and maintainability. Each file/module is described in detail, highlighting the changes compared to the initial version.
+
+---
+
+### 1. `src/buffett_agent.py`
+- **Refactored agent orchestration:**  
+  The `BuffettAgent` class now acts as the central orchestrator, coordinating between the RAG system, financial tools, and the belief system.
+- **Ticker extraction with LLM:**  
+  Integrated `LangChainTools.parse_tickers_with_langchain` for robust ticker extraction from user queries, ensuring only valid tickers are processed.
+- **Dynamic news-driven belief updates:**  
+  Added logic to fetch and process news for extracted tickers, updating the belief system automatically, evaluated by LLMs, and generated the key, summary, and confidence.
+- **Cleaner data flow:**  
+  Ensured that all financial tool inputs are dynamically fetched and validated, reducing reliance on hardcoded or sample data.
+
+---
+
+### 2. `src/belief_system.py`
+- **Belief system modularization:**  
+  The `BeliefTracker` class now manages beliefs, confidence levels, and causal relationships in a more modular way.
+- **LLM integration for belief updates:**  
+  Refactored to use a pluggable LLM interface (`LangChainOpenAI`), allowing for flexible and up-to-date language model usage.
+- **Batch news processing:**  
+  Improved the `update_beliefs_from_news` method to handle batch news updates, with robust parsing and error handling.
+
+---
+
+### 3. `src/financial_tools.py`
+- **Simplified DCF calculation:**  
+  Replaced the original multi-period DCF with a Gordon Growth Model (`simple_gordon_dcf`), using only one forward FCF and the formula FCF1/(r-g).
+- **Per-share intrinsic value:**  
+  Updated margin of safety calculations to use per-share intrinsic value (DCF divided by shares outstanding).
+
+---
+
+### 4. `src/resources/fin_data.py`
+- **Robust financial data acquisition:**  
+  The `MultiDataAgent` class now fetches data from multiple sources (yfinance, finnhub, simfin, Alpha Vantage) with improved error handling.
+- **PE analysis improvements:**  
+  Added methods to fetch historical PE ranges, industry average PE, and aggregate all necessary data for PE analysis.
+- **Margin of safety automation:**  
+  Automated the process of fetching current price, FCF, and shares outstanding for margin of safety calculations.
+
+---
+
+### 5. `src/parse_tools.py`
+- **Centralized LLM parsing utilities:**  
+  Created a new module to house all LLM-based parsing functions, such as ticker extraction and news-to-belief conversion.
+- **Modern LangChain usage:**  
+  Updated to use `llm.invoke()` instead of deprecated call patterns, ensuring compatibility with the latest LangChain versions.
+- **Robust output parsing:**  
+  Implemented fallback logic for JSON extraction and normalization, improving reliability when parsing LLM outputs.
+
+---
+
+### 6. `src/resources/data_template.py`
+- **Class-based data templates:**  
+  Refactored from static methods to an instantiable `DataTemplate` class, supporting dynamic data population and validation.
+- **API alignment:**  
+  Ensured that all data structures align with API requirements for seamless integration.
+
+---
+
+### 7. `src/main.py`
+- **Flask app configuration:**  
+  Enhanced development experience by enabling debug mode for real-time error tracking and hot reloading
+
+---
+
+### 8. General Improvements
+- **Modernized LangChain usage:**  
+  Removed deprecated patterns and ensured all LangChain calls are up-to-date.
+- **Ticker validation:**  
+  Added a utility to validate tickers using yfinance, filtering out invalid or non-tradable symbols.
+- **Prompt engineering:**  
+  Improved prompts for LLM-based extraction tasks, clarifying output formats and increasing reliability.
+- **Error handling:**  
+  Enhanced error handling and logging throughout the codebase, especially for external API calls and LLM integration.
+- **Documentation:**  
+  Added or improved code comments (in both English and Chinese) for better maintainability and onboarding.
+
+---
+
+## How to Use This Section
+
+- Use this summary to quickly understand the evolution of the codebase and the rationale behind major changes.
+- Refer to the detailed comments in each file for implementation specifics and usage examples.
+- For further questions or contributions, see the [Contributing Guidelines](#) and [API Documentation](#).
+
